@@ -30,6 +30,7 @@ const renderDog = (dog) => {
 }
 
 const editDog = (dog) => {
+    console.log(dog)
 
     const dogForm = document.getElementById('dog-form')
     
@@ -44,24 +45,28 @@ const editDog = (dog) => {
     const sexInput = inputs[2]
     sexInput.value = dog.sex
 
+    const newDog = {id: dog.id, name: nameInput.value, breed: breedInput.value, sex: sexInput.value}
+    console.log(newDog)
+
     const changeDog = inputs[3]
-    changeDog.addEventListener('submit', (e) => makeChange(e, dog))
+    console.log(changeDog)
+    changeDog.onsubmit = function(e) {makeChange(e, newDog)} 
 }
 
 const makeChange = (e, dog) => {
+    console.log(dog)
     e.preventDefault()
     fetch(`http://localhost:3000/dogs/${dog.id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type':'application/json'
         },
-        body: JSON.stringify({ dog: newDog})
+        body: JSON.stringify({ dog })
     })
-    .then(res => res.json())
-    .then(newDog => {renderDog(newDog)
-
-    })
+    .then(res => console.log(res))
+    
+    // .then(newDog => {renderDog(newDog)
+    // })
+    // .catch(err => console.log({failure: err}))
 
 }
-
-
