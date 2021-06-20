@@ -27,7 +27,7 @@ const renderDog = (dog) => {
     row.append(name, breed, sex, editButton)
 
     tableBody.append(row)
-}
+
 
 const editDog = (dog) => {
     console.log(dog)
@@ -45,28 +45,43 @@ const editDog = (dog) => {
     const sexInput = inputs[2]
     sexInput.value = dog.sex
 
-    const newDog = {id: dog.id, name: nameInput.value, breed: breedInput.value, sex: sexInput.value}
-    console.log(newDog)
+    // const newDog = {id: dog.id, name: nameInput.value, breed: breedInput.value, sex: sexInput.value}
 
     const changeDog = inputs[3]
-    console.log(changeDog)
-    changeDog.onsubmit = function(e) {makeChange(e, newDog)} 
-}
+    changeDog.addEventListener("submit", function(e){
+        e.preventDefault();
+        // const newName = e.target.nameInput.value
+        // const newBreed = e.target.breedInput.value
+        // const newSex = e.target.sexInput.value
 
-const makeChange = (e, dog) => {
-    console.log(dog)
-    e.preventDefault()
-    fetch(`http://localhost:3000/dogs/${dog.id}`, {
+        fetch(`http://localhost:3000/dogs/${dog.id}`, {
         method: 'PATCH',
         headers: {
             'Content-Type':'application/json'
         },
-        body: JSON.stringify({ dog })
+        body: JSON.stringify({ 
+            id: dog.id,
+            name: nameInput.value,
+            breed: breedInput.value,
+            sex: sexInput.value
+        })
     })
     .then(res => console.log(res))
-    
-    // .then(newDog => {renderDog(newDog)
-    // })
-    // .catch(err => console.log({failure: err}))
+    .then(newDog => renderDog(newDog))
 
+    })
 }
+}
+
+// const makeChange = (event, newDog) => {
+//     event.preventDefault()
+//     fetch(`http://localhost:3000/dogs/${dog.id}`, {
+//         method: 'PATCH',
+//         headers: {
+//             'Content-Type':'application/json'
+//         },
+//         body: JSON.stringify({ dog })
+//     })
+//     .then(res => console.log(res))
+//     .then(newDog => renderDog(newDog))
+// }
